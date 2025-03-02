@@ -69,7 +69,7 @@ export const TeamProvider = ({ children }: { children: ReactNode }) => {
         team.id === teamId ? { ...team, name: newName } : team
       )
     );
-  };
+  }
 
   const removeTeam = (teamId: string) => {
     setTeams(prevTeams => prevTeams.filter(team => team.id !== teamId));
