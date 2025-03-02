@@ -1,19 +1,15 @@
 import { useContext, useState } from 'react';
 import { TeamContext, Team } from '../../contexts/TeamContext';
 import UserForm from '../UserForm/UserForm';
-import {  FaUserPlus,  FaCheck, FaTimes, FaEllipsisV } from 'react-icons/fa';
+import { FaUserPlus, FaCheck, FaTimes, FaEllipsisV } from 'react-icons/fa';
 
 const TeamEditor = () => {
   const { teams, removeUserFromTeam, updateTeam, removeTeam, updateUser } = useContext(TeamContext);
-  
   const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
   const [newTeamName, setNewTeamName] = useState('');
-  
   const [editingUser, setEditingUser] = useState<{ teamId: string, userId: string } | null>(null);
   const [newUserName, setNewUserName] = useState('');
-  
   const [showUserFormFor, setShowUserFormFor] = useState<string | null>(null);
-  // Dropdown menüler için ek state’ler
   const [openTeamMenu, setOpenTeamMenu] = useState<string | null>(null);
   const [openUserMenu, setOpenUserMenu] = useState<{ teamId: string, userId: string } | null>(null);
 
@@ -60,21 +56,21 @@ const TeamEditor = () => {
   };
 
   const handleDeleteUser = (teamId: string, userId: string) => {
-    if(window.confirm("Kullanıcıyı silmek istediğinize emin misiniz?")){
+    if (window.confirm("Kullanıcıyı silmek istediğinize emin misiniz?")) {
       removeUserFromTeam(teamId, userId);
     }
   };
 
   return (
     <div className="space-y-6">
-      <h3 className="text-2xl font-bold text-center text-[#1a1a1a] ">Oluşturulan Takımlar</h3>
+      <h3 className="text-2xl font-bold text-center text-[#1a1a1a]">Oluşturulan Takımlar</h3>
       {teams.map(team => (
         <div
           key={team.id}
           className="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 transition-all duration-300 hover:shadow-xl"
         >
           {editingTeamId === team.id ? (
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-col md:flex-row items-center space-x-0 md:space-x-3 space-y-3 md:space-y-0">
               <input
                 type="text"
                 value={newTeamName}
@@ -82,40 +78,41 @@ const TeamEditor = () => {
                 className="flex-grow border border-gray-600 p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Takım adını düzenle"
               />
-              <button
-                onClick={() => handleSaveTeamClick(team.id)}
-                className="flex items-center space-x-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded transition-colors"
-              >
-                <FaCheck />
-                <span className="hidden md:inline">Kaydet</span>
-              </button>
-              <button
-                onClick={handleCancelTeamEdit}
-                className="flex items-center space-x-1 bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded transition-colors"
-              >
-                <FaTimes />
-                <span className="hidden md:inline">İptal</span>
-              </button>
+              <div className="flex flex-col md:flex-row gap-2">
+                <button
+                  onClick={() => handleSaveTeamClick(team.id)}
+                  className="flex items-center space-x-1 bg-transparent border border-gray-500 hover:bg-gray-700 text-white px-3 py-2 rounded transition-colors"
+                >
+                  <FaCheck />
+                  <span className="hidden md:inline">Kaydet</span>
+                </button>
+                <button
+                  onClick={handleCancelTeamEdit}
+                  className="flex items-center space-x-1 bg-transparent border border-gray-500 hover:bg-gray-700 text-white px-3 py-2 rounded transition-colors"
+                >
+                  <FaTimes />
+                  <span className="hidden md:inline">İptal</span>
+                </button>
+              </div>
             </div>
           ) : (
-            <div className="flex justify-between items-center relative">
-              <h4 className="text-xl font-bold capitalize">{team.name}</h4>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center relative">
+              <h4 className="text-xl font-bold capitalize mb-2 md:mb-0">{team.name}</h4>
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() =>
                     setShowUserFormFor(showUserFormFor === team.id ? null : team.id)
                   }
-                  className="flex items-center border border-gray-500 rounded-full bg-transparent hover:bg-gray-500 text-white px-3 py-3  cursor-pointer   transition-colors"
+                  className="flex items-center border border-gray-500 rounded-full bg-transparent hover:bg-gray-500 text-white px-3 py-3 cursor-pointer transition-colors"
                 >
-                 <FaUserPlus />
+                  <FaUserPlus />
                 </button>
-                {/* Takım için dropdown menü */}
                 <div className="relative">
                   <button
                     onClick={() =>
                       setOpenTeamMenu(openTeamMenu === team.id ? null : team.id)
                     }
-                    className="flex items-center p-2 hover:bg-gray-700 rounded-md cursor-pointer "
+                    className="flex items-center p-2 border border-gray-500 hover:bg-gray-700 rounded-md cursor-pointer"
                   >
                     <FaEllipsisV className="text-white" />
                   </button>
@@ -131,7 +128,10 @@ const TeamEditor = () => {
                         Takımı Sil
                       </div>
                       <div
-                        onClick={() => handleEditTeamClick(team)}
+                        onClick={() => {
+                          handleEditTeamClick(team);
+                          setOpenTeamMenu(null);
+                        }}
                         className="block px-4 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer"
                       >
                         Düzenle
@@ -142,7 +142,6 @@ const TeamEditor = () => {
               </div>
             </div>
           )}
-
           {showUserFormFor === team.id && (
             <div className="mt-4">
               <UserForm teamId={team.id} />
@@ -151,38 +150,39 @@ const TeamEditor = () => {
                   {team.users.map(user => (
                     <li
                       key={user.id}
-                      className="flex justify-between items-center border-b border-gray-700 pb-2"
+                      className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-700 pb-2"
                     >
                       {editingUser &&
                       editingUser.teamId === team.id &&
                       editingUser.userId === user.id ? (
-                        <div className="flex items-center space-x-2 w-full">
+                        <div className="flex flex-col md:flex-row items-center space-x-0 md:space-x-2 w-full space-y-2 md:space-y-0">
                           <input
                             type="text"
                             value={newUserName}
                             onChange={(e) => setNewUserName(e.target.value)}
-                            className="flex-grow border border-gray-600 p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="flex-grow border border-gray-600 p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Kullanıcı adını düzenle"
                           />
-                          <button
-                            onClick={() => handleSaveUserClick(team.id, user.id)}
-                            className="flex items-center space-x-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded transition-colors"
-                          >
-                            <FaCheck />
-                            <span className="hidden md:inline">Kaydet</span>
-                          </button>
-                          <button
-                            onClick={handleCancelUserEdit}
-                            className="flex items-center space-x-1 bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded transition-colors"
-                          >
-                            <FaTimes />
-                            <span className="hidden md:inline">İptal</span>
-                          </button>
+                          <div className="flex flex-col md:flex-row gap-2">
+                            <button
+                              onClick={() => handleSaveUserClick(team.id, user.id)}
+                              className="flex items-center space-x-1 bg-transparent border border-gray-700 rounded-md hover:bg-gray-700 text-white px-3 py-2  transition-colors"
+                            >
+                              <FaCheck />
+                              <span className="hidden md:inline">Kaydet</span>
+                            </button>
+                            <button
+                              onClick={handleCancelUserEdit}
+                              className="flex items-center space-x-1 bg-transparent border border-gray-700 rounded-md hover:bg-gray-700 text-white px-3 py-2  transition-colors"
+                            >
+                              <FaTimes />
+                              <span className="hidden md:inline">İptal</span>
+                            </button>
+                          </div>
                         </div>
                       ) : (
-                        <div className="flex justify-between items-center w-full">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full">
                           <span className="text-lg">{user.name}</span>
-                          {/* Kullanıcı için dropdown menü */}
                           <div className="relative">
                             <button
                               onClick={() =>

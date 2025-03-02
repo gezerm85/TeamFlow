@@ -1,9 +1,22 @@
 import { useContext, useMemo, useState, useEffect } from 'react';
-import ReactFlow, { MiniMap, Controls, Background, Node, Edge } from 'reactflow';
+import ReactFlow, {  Controls, Background, Node, Edge } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { TeamContext } from '../../contexts/TeamContext';
 import EditModal from '../../components/Modal/EditModal';
-import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, LabelList } from 'recharts';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip as RechartsTooltip,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Legend,
+  LabelList,
+  ResponsiveContainer
+} from 'recharts';
 import { FaInfoCircle } from 'react-icons/fa';
 
 const DiagramChartPage = () => {
@@ -22,6 +35,7 @@ const DiagramChartPage = () => {
     userId?: string;
     currentName: string;
   } | null>(null);
+
   useEffect(() => {
     const handleClick = () => {
       if (contextMenu?.visible) {
@@ -31,6 +45,7 @@ const DiagramChartPage = () => {
     window.addEventListener('click', handleClick);
     return () => window.removeEventListener('click', handleClick);
   }, [contextMenu]);
+
   const { nodes, edges } = useMemo(() => {
     const nodes: Node[] = [];
     const edges: Edge[] = [];
@@ -44,7 +59,11 @@ const DiagramChartPage = () => {
         type: 'default',
         data: {
           label: (
-            <div className="p-2 border rounded bg-blue-700 text-white cursor-pointer select-none" onClick={() => console.log(`Takım tıklandı: ${team.name}`)} onContextMenu={(e) => handleTeamRightClick(e, team.id)}>
+            <div
+              className="p-2 border rounded bg-blue-700 text-white cursor-pointer select-none"
+              onClick={() => console.log(`Takım tıklandı: ${team.name}`)}
+              onContextMenu={(e) => handleTeamRightClick(e, team.id)}
+            >
               Takım: {team.name}
             </div>
           )
@@ -58,7 +77,11 @@ const DiagramChartPage = () => {
           type: 'default',
           data: {
             label: (
-              <div className="p-2 border rounded bg-green-700 text-white cursor-pointer select-none" onClick={() => console.log(`Kullanıcı tıklandı: ${user.name}`)} onContextMenu={(e) => handleUserRightClick(e, team.id, user.id)}>
+              <div
+                className="p-2 border rounded bg-green-700 text-white cursor-pointer select-none"
+                onClick={() => console.log(`Kullanıcı tıklandı: ${user.name}`)}
+                onContextMenu={(e) => handleUserRightClick(e, team.id, user.id)}
+              >
                 Kullanıcı: {user.name}
               </div>
             )
@@ -77,11 +100,14 @@ const DiagramChartPage = () => {
     });
     return { nodes, edges };
   }, [teams]);
+
   const chartData = teams.map((team) => ({
     name: team.name,
     Kullanıcı: team.users.length
   }));
+
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
+
   const handleTeamRightClick = (e: React.MouseEvent, teamId: string) => {
     e.preventDefault();
     setContextMenu({
@@ -92,6 +118,7 @@ const DiagramChartPage = () => {
       teamId
     });
   };
+
   const handleUserRightClick = (e: React.MouseEvent, teamId: string, userId: string) => {
     e.preventDefault();
     setContextMenu({
@@ -103,6 +130,7 @@ const DiagramChartPage = () => {
       userId
     });
   };
+
   const handleEdit = () => {
     if (contextMenu) {
       if (contextMenu.type === 'team') {
@@ -129,23 +157,25 @@ const DiagramChartPage = () => {
       setContextMenu({ ...contextMenu, visible: false });
     }
   };
+
   return (
     <div className="p-4 bg-transparent min-h-screen text-white relative">
       {teams.length === 0 ? (
-        <div className="p-4 bg-transparent min-h-screen text-white flex flex-col justify-center items-center">
+        <div className="p-4 flex flex-col justify-center items-center min-h-screen">
           <div className="bg-gray-800 p-8 rounded-lg shadow-lg flex flex-col items-center">
             <FaInfoCircle className="text-6xl text-gray-400 mb-4" />
             <p className="text-xl text-white mb-2">Veri bulunamadı</p>
-            <p className="text-gray-400 text-center">Lütfen takım ekleyin ve kullanıcılarınızı oluşturun.</p>
+            <p className="text-gray-400 text-center">
+              Lütfen takım ekleyin ve kullanıcılarınızı oluşturun.
+            </p>
           </div>
         </div>
       ) : (
         <>
           <div className="mb-8">
             <h3 className="text-xl font-semibold mb-2">Diyagram (React Flow)</h3>
-            <div style={{ width: '100%', height: 400 }} className="border border-gray-700 rounded">
+            <div className="border border-gray-700 rounded w-full h-[300px] md:h-[400px]">
               <ReactFlow className="bg-gray-800" nodes={nodes} edges={edges} fitView>
-                <MiniMap nodeColor={() => '#555'} />
                 <Controls />
                 <Background color="#aaa" gap={16} />
               </ReactFlow>
@@ -153,46 +183,66 @@ const DiagramChartPage = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-              <div className="flex justify-center">
-                <PieChart width={300} height={300}>
-                  <Pie data={chartData} dataKey="Kullanıcı" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" label>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    dataKey="Kullanıcı"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    fill="#8884d8"
+                    label
+                  >
                     {chartData.map((_entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <RechartsTooltip contentStyle={{ backgroundColor: "#fff", border: "none", color: "#fff" }} />
+                  <RechartsTooltip contentStyle={{ backgroundColor: '#fff', border: 'none', color: '#fff' }} />
                 </PieChart>
-              </div>
+              </ResponsiveContainer>
             </div>
             <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-              <BarChart width={400} height={300} data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#555" />
-                <XAxis dataKey="name" stroke="#fff" />
-                <YAxis stroke="#fff" allowDecimals={false} />
-                <RechartsTooltip contentStyle={{ backgroundColor: "#333", border: "none", color: "#fff" }} />
-                <Legend wrapperStyle={{ color: "#fff" }} />
-                <Bar dataKey="Kullanıcı" fill="#82ca9d">
-                  <LabelList dataKey="name" position="top" fill="#fff" />
-                </Bar>
-              </BarChart>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#555" />
+                  <XAxis dataKey="name" stroke="#fff" />
+                  <YAxis stroke="#fff" allowDecimals={false} />
+                  <RechartsTooltip contentStyle={{ backgroundColor: '#333', border: 'none', color: '#fff' }} />
+                  <Legend wrapperStyle={{ color: '#fff' }} />
+                  <Bar dataKey="Kullanıcı" fill="#82ca9d">
+                    <LabelList dataKey="name" position="top" fill="#fff" />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </>
       )}
       {contextMenu && contextMenu.visible && (
-        <div className="absolute bg-gray-800 text-white rounded shadow-lg z-50" style={{ top: contextMenu.y, left: contextMenu.x }}>
-          <ul className="p-4 bg-gray-800 flex flex-col gap-4 rounded-full">
-            <li className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded-md border border-gray-500" onClick={handleEdit}>
+        <div
+          className="absolute bg-gray-800 text-white rounded shadow-lg z-50"
+          style={{ top: contextMenu.y, left: contextMenu.x }}
+        >
+          <ul className="p-4 flex flex-col gap-4 rounded-full">
+            <li
+              className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded-md border border-gray-500"
+              onClick={handleEdit}
+            >
               Düzenle
             </li>
-            <li className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded-md border border-gray-500" onClick={() => {
-              if (contextMenu.type === 'team') {
-                removeTeam(contextMenu.teamId);
-              } else if (contextMenu.type === 'user' && contextMenu.userId) {
-                removeUserFromTeam(contextMenu.teamId, contextMenu.userId);
-              }
-              setContextMenu({ ...contextMenu, visible: false });
-            }}>
+            <li
+              className="px-4 py-2 hover:bg-gray-700 cursor-pointer rounded-md border border-gray-500"
+              onClick={() => {
+                if (contextMenu.type === 'team') {
+                  removeTeam(contextMenu.teamId);
+                } else if (contextMenu.type === 'user' && contextMenu.userId) {
+                  removeUserFromTeam(contextMenu.teamId, contextMenu.userId);
+                }
+                setContextMenu({ ...contextMenu, visible: false });
+              }}
+            >
               Sil
             </li>
           </ul>

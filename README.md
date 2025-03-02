@@ -1,54 +1,78 @@
-# React + TypeScript + Vite
+# TeamFlow
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bu proje, React ve Vite kullanılarak geliştirilmiş modern bir web uygulamasıdır. Uygulama, kullanıcıların takımlar oluşturmasını, takımlara kullanıcı ekleme/çıkarma işlemlerini gerçekleştirmesini ve sonuçları hem liste hem de grafiksel olarak görüntüleyebilmesini sağlar.
 
-Currently, two official plugins are available:
+## Proje Hakkında
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Takım Oluşturma:** Kullanıcılar kendi takımlarını oluşturabilir.
+- **Kullanıcı Yönetimi:** Oluşturulan takımlara kullanıcı ekleme ve çıkarma işlemleri yapılabilir.
+- **Liste & Grafik Görüntüleme:** Takım üyeleri liste halinde görüntülenirken, aynı zamanda React Flow ve Recharts ile grafiksel analiz yapılabilir.
+- **Modern Tasarım:** TailwindCSS sayesinde duyarlı ve modern bir kullanıcı arayüzü sunulmaktadır.
 
-## Expanding the ESLint configuration
+## Kullanıcı Deneyimi (UX) ve Arayüz (UI) Tasarımı
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Bu proje, kullanıcı dostu ve estetik bir arayüz sağlamak amacıyla UX ve UI prensiplerine uygun şekilde geliştirildi:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **Sezgisel ve Akışkan Kullanıcı Deneyimi:** Kullanıcıların hızlı ve kolay bir şekilde işlem yapabilmesi için mantıklı bir hiyerarşik yapı planlanmıştır.
+- **Animasyonlar ve Geçiş Efektleri:** Arayüzü daha canlı ve modern hale getirmek için HTML ve CSS kullanılarak mikro etkileşimler ve animasyonlar eklenmiştir.
+- **Minimalist ve Okunaklı Tasarım:** Kullanıcıların dikkatini dağıtmadan veriye odaklanmasını sağlayan sade bir tasarım tercih edilmiştir.
+- **Erişilebilirlik:** Farklı cihazlar ve kullanıcı ihtiyaçları göz önünde bulundurularak, duyarlı (responsive) ve erişilebilir bir yapı oluşturulmuştur.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Özellikler
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Dinamik Takım Oluşturma:** Kullanıcılar diledikleri takımı oluşturabilir.
+- **Kullanıcı Ekleme & Çıkarma:** Takımlara kullanıcı ekleme ve çıkarma işlemleri kolaylıkla gerçekleştirilebilir.
+- **Listeleme:** Takım üyeleri düzenli bir liste halinde sunulur.
+- **Grafiksel Analiz:** React Flow ve Recharts ile veriler grafiksel olarak analiz edilebilir.
+- **Duyarlı Tasarım:** TailwindCSS ile oluşturulan arayüz tüm cihazlarda uyumlu çalışır.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Kurulum
+
+1. **Projeyi Klonlayın:**
+    ```bash
+    git clone https://github.com/kullaniciadi/TeamFlow.git
+    cd TeamFlow
+    ```
+
+2. **Bağımlılıkları Yükleyin:**
+    ```bash
+    npm install
+    # veya
+    yarn install
+    ```
+
+3. **Geliştirme Sunucusunu Başlatın:**
+    ```bash
+    npm run dev
+    # veya
+    yarn dev
+    ```
+
+## Kullanım
+
+Geliştirme sunucusu çalışırken, tarayıcınızda `http://localhost:3000` (veya yapılandırdığınız port numarası) adresine giderek uygulamayı deneyimleyebilirsiniz.
+
+- Takım oluşturma, kullanıcı ekleme/çıkarma işlemlerini test edebilirsiniz.
+- Liste ve grafik bileşenlerinin çalışma mantığını gözlemleyebilirsiniz.
+
+## Kullanılan Teknolojiler & Bağımlılıklar
+
+- **React:** ^19.0.0
+- **React DOM:** ^19.0.0
+- **React Icons:** ^5.5.0
+- **React Router DOM:** ^7.2.0
+- **React Flow:** ^11.11.4
+- **Recharts:** ^2.15.1
+- **TailwindCSS:** ^4.0.9
+
+Daha fazla bilgi için:
+- [Vite](https://vitejs.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
+
+## İletişim
+
+Herhangi bir soru, öneri veya geri bildirim için aşağıdaki iletişim bilgilerini kullanabilirsiniz:
+
+📧 **E-posta:** [gezermcelebi@gmail.com](mailto:gezermcelebi@gmail.com)
+🔗 **LinkedIn:** [Mehmet Çelebi Gezer](https://www.linkedin.com/in/mehmet-%C3%A7elebi-gezer-605a38217/)
+

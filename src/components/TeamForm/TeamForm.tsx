@@ -14,16 +14,18 @@ const TeamForm = () => {
   };
 
   return (
-    <div  className="mb-4">
+    <div className="mb-4 flex flex-col md:flex-row items-stretch">
       <input
         type="text"
         placeholder="Takım adı"
         value={teamName}
         onChange={(e) => setTeamName(e.target.value)}
-        className="border p-2 mr-4  bg-gray-800 text-white rounded-md"
+        className="border p-2 mr-0 mb-2 md:mr-4 md:mb-0 bg-gray-800 text-white rounded-md"
       />
-      <button onClick={handleSubmit} 
-      className="bg-transparent rounded-md border border-gray-500 cursor-pointer hover:bg-gray-700 text-[#1a1a1a] hover:text-[#fff]  p-2 ">
+      <button
+        onClick={handleSubmit}
+        className="bg-transparent rounded-md border border-gray-500 cursor-pointer hover:bg-gray-700 text-[#1a1a1a] hover:text-[#fff] p-2"
+      >
         Takımı Oluştur
       </button>
     </div>
